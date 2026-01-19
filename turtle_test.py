@@ -6,6 +6,7 @@ RADIUS = 40
 
 # Draw Grid
 def drawGrid():
+  t.home()
   # Top Line
   t.penup()
   t.goto(-150, 50)
@@ -117,4 +118,14 @@ def clicked(x, y):
   screen.onclick(clicked)
 
 screen.onclick(clicked)
+
+def restart():
+  t.clear()
+  drawGrid()
+  global turn
+  turn = 0
+
+screen.listen()
+screen.onkey(restart, "r")
+
 turtle.mainloop()
