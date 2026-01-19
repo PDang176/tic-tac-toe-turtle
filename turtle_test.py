@@ -2,6 +2,8 @@ import turtle
 t = turtle.Turtle()
 t.speed(5) # 1:slowest, 3:slow, 5:normal, 10:fast, 0:fastest
 screen = turtle.Screen()
+RADIUS = 40
+
 # Draw Grid
 def drawGrid():
   # Top Line
@@ -41,25 +43,16 @@ drawGrid()
 # Middle Right: x > 50, -50 < y < 50
 # Bottom Right: x > 50, y < -50
 
-working = False
-
 def drawO(x, y):
-  global working
-  if working:
-    return
-
-  screen.onclick(None)
-  working = True
-
-  t.setheading(-90)
+  t.setheading(0)
   t.penup()
   # Set x
   if x < -50:
-    x = -140
+    x = -100
   elif x < 50:
-    x = -40
+    x = 0
   else:
-    x = 60
+    x = 100
   # Set y
   if y < -50:
     y = -100
@@ -68,14 +61,43 @@ def drawO(x, y):
   else:
     y = 100
   
-  t.goto(x, y)
+  t.goto(x, y - RADIUS)
   t.pendown()
   t.circle(40)
 
-  working = False
-  screen.onclick(clicked)
-
 def drawX(x, y):
+  t.penup()
+  # Set x
+  if x < -50:
+    x = -100
+  elif x < 50:
+    x = 0
+  else:
+    x = 100
+  # Set y
+  if y < -50:
+    y = -100
+  elif y < 50:
+    y = 0
+  else:
+    y = 100
+  
+  t.goto(x - RADIUS, y + RADIUS)
+  t.pendown()
+  t.setheading(-45)
+  t.forward(113)
+
+  t.penup()
+    
+  t.goto(x + RADIUS, y + RADIUS)
+  t.pendown()
+  t.setheading(-135)
+  t.forward(113)
+
+working = False
+turn = 0 # 0: O, 1: X
+
+def clicked(x, y):
   global working
   if working:
     return
@@ -83,54 +105,6 @@ def drawX(x, y):
   screen.onclick(None)
   working = True
 
-  t.penup()
-  # Set x
-  if x < -50:
-    x = -140
-  elif x < 50:
-    x = -40
-  else:
-    x = 60
-  # Set y
-  if y < -50:
-    y = -60
-  elif y < 50:
-    y = 40
-  else:
-    y = 140
-  
-  t.goto(x, y)
-  t.pendown()
-  t.setheading(-45)
-  t.forward(113)
-
-  t.penup()
-  # Set x
-  if x < -50:
-    x = -60
-  elif x < 50:
-    x = 40
-  else:
-    x = 140
-  # Set y
-  if y < -50:
-    y = -60
-  elif y < 50:
-    y = 40
-  else:
-    y = 140
-    
-  t.goto(x, y)
-  t.pendown()
-  t.setheading(-135)
-  t.forward(113)
-
-  working = False
-  screen.onclick(clicked)
-
-turn = 0 # 0: O, 1: X
-
-def clicked(x, y):
   global turn
   if turn == 0:
     drawO(x, y)
@@ -138,6 +112,9 @@ def clicked(x, y):
   else:
     drawX(x, y)
     turn = 0
+
+  working = False
+  screen.onclick(clicked)
 
 screen.onclick(clicked)
 turtle.mainloop()
